@@ -114,6 +114,7 @@ plot_barplot <- function(data_frame,
   #'   arguments and can not be controlled individually.
   #'   
   #'   Labels don't look good with position = "stack"
+  #' @export
 
   p <- ggplot2::ggplot(data = data_frame)
 
