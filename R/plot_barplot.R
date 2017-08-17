@@ -124,7 +124,7 @@ plot_barplot <- function(data_frame,
                                colour = color_vars,
                                label = label_vars)
 
-  p <- p + ggplot2::geom_bar(position="dodge",
+  p <- p + ggplot2::geom_bar(position=pos,
                              alpha = barplot_alpha,
                              stat = "identity",
                              width = bar_width)
@@ -134,15 +134,11 @@ plot_barplot <- function(data_frame,
                                      limits = rev(x_limits),
                                      breaks = x_breaks)
 
-  ## title
-  if(exists("main_title")){
-    p <- p + ggplot2::ggtitle(main_title)
-  }
 
   ## percentage for y scale
   if(percentage == TRUE) {
     p <- p + ggplot2::scale_y_continuous(y_title,
-                                         labels = percent,
+                                         labels = scales::percent,
                                          limits = y_limits,
                                          breaks = y_breaks)
   } else {
@@ -188,11 +184,20 @@ plot_barplot <- function(data_frame,
 
   ## bar labels
   if(!(label_vars == FALSE)){
+    if(!(pos == "dodge")){
     p <- p + ggplot2::geom_label(ggplot2::aes_string(y = paste(y_var, " - 0.00"), fill = rev(fill_vars)), 
                                  colour = text_col,
                                  show.legend = FALSE,
-                                 position = pos,
+                                 position=position_stack(vjust=0.5),
                                  size = basesize - 9)
+    }
+    else {
+      p <- p + ggplot2::geom_label(ggplot2::aes_string(y = paste(y_var, " - 0.00"), fill = rev(fill_vars)), 
+                                   colour = text_col,
+                                   show.legend = FALSE,
+                                   position = position_dodge(-0.9),
+                                   size = basesize - 9)
+    }
   }
 
   p <- p + ggplot2::theme_bw()
@@ -201,7 +206,7 @@ plot_barplot <- function(data_frame,
                           legend.key.size = ggplot2::unit(keysize, "cm"),
                           legend.key = ggplot2::element_blank(),
                           legend.background = ggplot2::element_rect(colour = legend_col),
-                          legend.justification = c(1, 1),
+                          ## legend.justification = c(1, 1),
                           legend.position = legend_pos,
                           axis.text.x = ggplot2::element_text(size = basesize, colour = text_col, lineheight = 1.2, vjust = 1),
                           axis.text.y = ggplot2::element_text(size = basesize-2, colour = text_col, lineheight = 1.2, vjust = 0.5),
@@ -212,5 +217,12 @@ plot_barplot <- function(data_frame,
                           plot.margin = ggplot2::unit(c(.8835, .582083, 0.0748, .9378), "cm"),
                           strip.background = ggplot2::element_rect(fill = "#ececec", colour = black_seq[8]), # facet background
                           strip.text.y = ggplot2::element_text(size = 8, angle = 0)) # for facet text
+
+  ## title
+  if(exists("main_title")){
+    ## p <- p + ggplot2::ggtitle(main_title)
+    title <- cowplot::ggdraw() + cowplot::draw_label(main_title) ##, fontface='bold')
+    p <- cowplot::plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1))
+  }
   return(p)
 }
