@@ -182,22 +182,13 @@ plot_barplot <- function(data_frame,
     p <- p + ggplot2::coord_flip()
   }
 
-  ## bar labels
+  ## ## bar labels
   if(!(label_vars == FALSE)){
-    if(!(pos == "dodge")){
-    p <- p + ggplot2::geom_label(ggplot2::aes_string(y = paste(y_var, " - 0.00"), fill = rev(fill_vars)), 
+    p <- p + ggplot2::geom_label(ggplot2::aes_string(y = paste(y_var, " - 0.00"), fill = rev(fill_vars)),
                                  colour = text_col,
                                  show.legend = FALSE,
-                                 position=position_stack(vjust=0.5),
+                                 position = pos,
                                  size = basesize - 9)
-    }
-    else {
-      p <- p + ggplot2::geom_label(ggplot2::aes_string(y = paste(y_var, " - 0.00"), fill = rev(fill_vars)), 
-                                   colour = text_col,
-                                   show.legend = FALSE,
-                                   position = position_dodge(-0.9),
-                                   size = basesize - 9)
-    }
   }
 
   p <- p + ggplot2::theme_bw()
