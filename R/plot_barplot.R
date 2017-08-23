@@ -13,7 +13,7 @@ plot_barplot <- function(data_frame,
                          label_vars = FALSE,
                          percentage = FALSE,
                          color_vars = NULL, fill_vars = NULL,
-                         colour_palette = FALSE, fill_palette = FALSE,
+                         colour_palette = NULL, fill_palette = NULL,
                          pos = "dodge",
                          barplot_alpha = 1,
                          colour_title = FALSE,
@@ -148,7 +148,7 @@ plot_barplot <- function(data_frame,
   }
 
   ## colour either manual or brewer
-  if(colour_palette){
+  if(exists(colour_palette) & exists(fill_palette)){
     p <- p + scale_colour_manual(values = colour_palette,
                                  labels = legend_labels)
     p <- p + scale_fill_manual(values = fill_palette,
