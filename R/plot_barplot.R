@@ -1,10 +1,11 @@
 plot_barplot <- function(data_frame,
+                         x_var,
+                         y_var,
                          main_title = NULL,
                          bar_width = NULL,
                          x_title = ggplot2::waiver(),
+                         x_ticks=TRUE,
                          y_title = ggplot2::waiver(),
-                         x_var,
-                         y_var,
                          x_limits = NULL,
                          y_limits = NULL,
                          x_breaks = ggplot2::waiver(),
@@ -19,25 +20,22 @@ plot_barplot <- function(data_frame,
                          colour_title = FALSE,
                          fill_title = FALSE,
                          legend_labels = ggplot2::waiver(),
-                         legend_pos = c(1,1),
                          legend_rev = FALSE,
-                         legend_col = "#E5E2E0",
-                         keysize = 0.7,
-                         text_col = black_seq[8],
-                         basesize = 12,
                          flip = FALSE){
   #' Draws barplots.
   #' 
   #' @param data_frame: A data frame
+  #' @param x_var: A factor
+  #' @param y_var: A numerical variable
+  #'
   #' @param main_title: A string, optional main title of the barplot
   #' @param bar_width: A floating number, optional bar width
   #'   
-  #' @param x_var: A factor
   #' @param x_title: A string, optional title of the x-axis
   #' @param x_limits: A vector of length 2, optional scale limits, e.g., c(4,10)
   #' @param x_breaks: A vector, optional scale breaks, e.g., c(4, 6, 9)
+  #' @param x_ticks: Logical, FALSE switches off tick marks on the x-axis
   #'   
-  #' @param y_var: A numerical variable
   #' @param y_title: A string, optional title of the y-axis
   #' @param y_limits: A vector of length 2, optional scale limits, e.g., c(0, 1)
   #' @param y_breaks: A vector, optional breaks, e.g., c(0.0, 0.5, 1.0)
@@ -114,6 +112,9 @@ plot_barplot <- function(data_frame,
   #'   Labels don't look good with position = "stack"
   #' @export
 
+  ## theme
+  set_bar_theme()
+
   p <- ggplot2::ggplot(data = data_frame)
 
   p <- p + ggplot2::aes_string(x = x_var,
@@ -160,7 +161,7 @@ plot_barplot <- function(data_frame,
 
   ## facet
   if(!(y_facet == FALSE)) {
-    p <- p + ggplot2::facet_grid(y_facet, drop = FALSE)
+    p <- p + ggplot2::facet_grid(y_facet, drop = FALSE, switch="y")
   }
 
   ## legend
@@ -180,38 +181,61 @@ plot_barplot <- function(data_frame,
     p <- p + ggplot2::coord_flip()
   }
 
-  ## ## bar labels
+  ## bar labels
   if(!(label_vars == FALSE)){
     p <- p + ggplot2::geom_label(ggplot2::aes_string(y = paste(y_var, " - 0.00"), fill = rev(fill_vars)),
-                                 colour = text_col,
+                                 colour = theme_get()[["bar.label.color"]],
+                                 size = theme_get()[["bar.label.size"]],
                                  show.legend = FALSE,
-                                 position = pos,
-                                 size = basesize - 9)
+                                 position = pos)
   }
 
-  p <- p + ggplot2::theme_bw()
-  p <- p + ggplot2::theme(legend.text = ggplot2::element_text(size = basesize - 2, colour = text_col),
-                          legend.title = ggplot2::element_text(size = basesize, colour = text_col),
-                          legend.key.size = ggplot2::unit(keysize, "cm"),
-                          legend.key = ggplot2::element_blank(),
-                          legend.background = ggplot2::element_rect(colour = legend_col),
-                          ## legend.justification = c(1, 1),
-                          legend.position = legend_pos,
-                          axis.text.x = ggplot2::element_text(size = basesize, colour = text_col, lineheight = 1.2, vjust = 1),
-                          axis.text.y = ggplot2::element_text(size = basesize, colour = text_col, lineheight = 1.2, vjust = 0.5),
-                          axis.title.x = ggplot2::element_text(vjust = 3.1804, colour = text_col, size = basesize + 2, margin=ggplot2::margin(25,0,0,0)),
-                          axis.title.y = ggplot2::element_text(vjust = 0.6316, colour = text_col, size = basesize + 2),
-                          axis.ticks.length = ggplot2::unit(.20888, "cm"),
-                          ## plot.title = ggplot2::element_text(vjust = 3.8746, hjust = 0, colour = text_col, size = basesize + 8),
-                          plot.margin = ggplot2::unit(c(.8835, .582083, 0.0748, .9378), "cm"),
-                          strip.background = ggplot2::element_rect(fill = "#ececec", colour = black_seq[8]), # facet background
-                          strip.text.y = ggplot2::element_text(size = 8, angle = 0)) # for facet text
+  ## x_ticks switches off labels and ticks on the x-axis
+  if(!x_ticks){
+    p <- p + ggplot2::theme(axis.text.x=element_blank(),
+                            axis.ticks.x=element_blank())
+  }
+
 
   ## title
   if(exists("main_title")){
-    ## p <- p + ggplot2::ggtitle(main_title)
-    title <- cowplot::ggdraw() + cowplot::draw_label(main_title, size=basesize+5) ##, fontface='bold')
+    title <- cowplot::ggdraw() + cowplot::draw_label(main_title,
+                                                     size=theme_get()[["main.title.size"]])
     p <- cowplot::plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1))
   }
+
   return(p)
+}
+
+
+set_bar_theme <- function(text_col = black_seq[8],
+                           basesize = 12,
+                           legend_col = "#E5E2E0",
+                           legend_pos = "bottom",
+                           keysize = 0.7) {
+  #' Sets a theme for a barplot
+  bar_theme <- ggplot2::theme_bw() +
+    ggplot2::theme(legend.text = ggplot2::element_text(size = basesize - 2, colour = text_col),
+                   legend.title = ggplot2::element_text(size = basesize, colour = text_col),
+                   legend.key.size = ggplot2::unit(keysize, "cm"),
+                   legend.key = ggplot2::element_blank(),
+                   legend.background = ggplot2::element_rect(colour = legend_col),
+                   legend.position = legend_pos,
+                   axis.title.x = ggplot2::element_text(vjust = 3.1804, colour = text_col, size = basesize + 2, margin=ggplot2::margin(25,0,0,0)),
+                   axis.text.x = ggplot2::element_text(lineheight = 1.2, vjust = 1),
+                   axis.title.y = ggplot2::element_text(vjust = 0.6316, colour = text_col, size = basesize + 2),
+                   axis.text.y = ggplot2::element_text(size = basesize, colour = text_col, lineheight = 1.2, vjust = 0.5),
+                   axis.ticks.length = ggplot2::unit(.20888, "cm"),
+                   ## plot.title = ggplot2::element_text(vjust = 3.8746, hjust = 0, colour = text_col, size = basesize + 8),
+                   plot.margin = ggplot2::unit(c(.8835, .582083, 0.0748, .9378), "cm"),
+                   panel.border = element_rect(color = "grey", fill = NA, size = 1), ## for facet borders
+                   strip.background = ggplot2::element_rect(fill = "#ececec", colour = black_seq[8]), # facet background
+                   strip.text.x = ggplot2::element_text(size = basesize), # for facet text
+                   strip.text.y = ggplot2::element_text(size = basesize, angle = 0)) # for facet text
+
+  bar_theme["main.title.size"] <- basesize+5
+  bar_theme["bar.label.size"] <- basesize-7
+  bar_theme["bar.label.color"] <- text_col
+
+theme_set(bar_theme)
 }
