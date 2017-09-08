@@ -4,94 +4,83 @@
 \alias{plot_barplot}
 \title{Draws barplots.}
 \usage{
-plot_barplot(data_frame, main_title = NULL, bar_width = NULL,
-  x_title = ggplot2::waiver(), y_title = ggplot2::waiver(), x_var, y_var,
-  x_limits = NULL, y_limits = NULL, x_breaks = ggplot2::waiver(),
-  y_breaks = ggplot2::waiver(), y_facet = FALSE, label_vars = FALSE,
-  percentage = FALSE, color_vars = NULL, fill_vars = NULL,
-  colour_palette = FALSE, fill_palette = FALSE, pos = "dodge",
-  barplot_alpha = 1, colour_title = FALSE, fill_title = FALSE,
-  legend_labels = ggplot2::waiver(), legend_pos = c(1, 1),
-  legend_rev = FALSE, legend_col = "#E5E2E0", keysize = 0.7,
-  text_col = black_seq[8], basesize = 12, flip = FALSE)
+plot_barplot(data_frame, x_var, y_var, main_title = NULL, bar_width = NULL,
+  x_title = ggplot2::waiver(), x_ticks = TRUE,
+  y_title = ggplot2::waiver(), x_limits = NULL, y_limits = NULL,
+  x_breaks = ggplot2::waiver(), y_breaks = ggplot2::waiver(),
+  y_facet = FALSE, label_vars = FALSE, percentage = FALSE,
+  colour_vars = NULL, fill_vars = NULL, colour_palette = NULL,
+  fill_palette = NULL, pos = "dodge", barplot_alpha = 1,
+  colour_title = FALSE, fill_title = FALSE,
+  legend_labels = ggplot2::waiver(), legend_rev = FALSE, flip = FALSE,
+  text_col = NULL, basesize = NULL, legend_col = NULL,
+  legend_pos = NULL, keysize = NULL)
 }
 \arguments{
 \item{data_frame:}{A data frame}
 
-\item{main_title:}{Title of the barplot, defaults to NULL.}
+\item{x_var:}{A factor}
 
-\item{bin_width:}{Width of the bars, defaults to NULL.}
+\item{y_var:}{A numerical variable}
 
-\item{text_col:}{Text colour, defaults to black_seq[8]}
+\item{main_title:}{A string, optional main title of the barplot}
 
-\item{basesize:}{Text basesize, defaults to 12}
+\item{bar_width:}{A floating number, optional bar width}
 
-\item{flip:}{Flips x-axis and y-axis if TRUE, defaults to FALSE}
+\item{x_title:}{A string, optional title of the x-axis}
 
-\item{x_title:}{X-axis title, string in quotations, e.g., "Year Level"}
+\item{x_limits:}{A vector of length 2, optional scale limits, e.g., c(4,10)}
 
-\item{x_var:}{X-axis variable, has to be a factor}
+\item{x_breaks:}{A vector, optional scale breaks, e.g., c(4, 6, 9)}
 
-\item{x_limits:}{Scale limits, e.g., c(4,10) for a year level variable}
+\item{x_ticks:}{Logical, FALSE switches off tick marks on the x-axis}
 
-\item{x_breaks:}{Breaks, e.g., c(4, 6, 9) for a year level variable}
+\item{y_title:}{A string, optional title of the y-axis}
 
-\item{y_title:}{Y-axis title, string in quotations, e.g., "Percentage of 
-Blocks"}
+\item{y_limits:}{A vector of length 2, optional scale limits, e.g., c(0, 1)}
 
-\item{y_var:}{Y-axis variable}
+\item{y_breaks:}{A vector, optional breaks, e.g., c(0.0, 0.5, 1.0)}
 
-\item{y_limits:}{Scale limits, e.g., c(0, 1) for a percentage variable}
-
-\item{y_breaks:}{Breaks, e.g., c(0, 0.5, 1) for a percentage variable}
-
-\item{y_facet:}{A grid for the y-variable controlled via a formula in 
-quotations e.g., "SCHOOL ~ ." to have the y-variable sliced horizontally 
+\item{y_facet:}{A formular, an optional grid for the y-variable controlled
+by y_facet e.g., "SCHOOL ~ ." to have the y-variable sliced horizontally 
 by a school name variable, or ". ~ SCHOOL" to have the y-variable sliced 
 vertically by a school name variable. Defaults to FALSE.}
 
-\item{label_vars:}{A variable for bar labels, e.g, 
-label_vars="percent(FREQ)"}
+\item{label_vars:}{An optional label for the bars , e.g, "percent(FREQ)"}
 
-\item{percentage:}{whether the quantitative variable should have percentage
-labels}
+\item{percentage:}{logical, if TRUE assumes that y_var is a percentage}
 
-\item{color_vars:}{variable by which to cross the x-variable, used for 
-colouring the bars, has to be factor}
+\item{fill_vars:}{A factor, an optional variable by which to slice the
+x-variable, used for filling the bars}
 
-\item{fill_vars:}{variable by which to cross the x-variable, used for 
-filling the bars, has to be factor}
+\item{fill_palette:}{A vector of length equal to the number of categories
+of fill_vars, an optional colour palette, defaults to fill_brewer}
 
-\item{colour_palette:}{palette values for scale_colour, defaults to 
-colour_brewer}
+\item{colour_vars:}{A factor, an optional variable by which to slice the
+x-variable, usually equal to fill_vars, used for colouring the outside
+edge of the bars}
 
-\item{fill_palette:}{palette values for scale_fill, defaults to fill_brewer}
+\item{colour_palette:}{A vector of length equal to the number of categories
+of colour_vars, an optional colour palette, usually equal to fill_palette,
+but can be used to highlight the bar borders, defaults to colour_brewer}
 
-\item{pos:}{position of boxplot, default at "dodge"}
+\item{pos:}{A position, an optional placement rule for the bars, defaults to "dodge"}
 
-\item{barplot_alpha:}{degree of transparency of barplot, default at 1
-
-
-legend arguments}
+\item{barplot_alpha:}{A floating number between 0 and 1, an optional degree of transparency for the bars, default at 1}
 
 \item{colour_title:}{legend guide for scale_colour, setting a title 
-activates the legend, defaults to FALSE.}
+activates the legend, requires colour_vars to be set, defaults to FALSE.}
 
 \item{fill_title:}{legend guide for scale_fill, setting a title activates 
-the legend, default at FALSE.}
+the legend, requires fill_vars to be set, default at FALSE.}
 
 \item{legend_labels:}{a vector of labels for the legend, e.g, 
 c("M\\u0101ori", "Pakeh\\u0101")}
 
-\item{legend_pos:}{legend positions, takes a string ("top", "bottom", 
-"right", "left"), or a vector of two numbers between 0 and 1, indicating 
-the relative x and y positions.}
-
 \item{legend_rev:}{determines whether the order of the legend labels should
 be reversed}
 
-\item{legend_col:}{legend background colour, default at "#E5E2E0" keysize: 
-size of the legend}
+\item{flip:}{Flips x-axis and y-axis if TRUE, defaults to FALSE}
 }
 \value{
 a bar plot object
@@ -102,25 +91,26 @@ Draws barplots.
 \section{Bugs}{
  Guide colour and guide fill currently take the same 
   arguments and can not be controlled individually.
-  
-  Labels don't look good with position = "stack"
 }
 
 \examples{
 
+library(tidyverse)
+iris.plot <- iris \%>\% group_by(Species) \%>\% summarize(Sepal.Length=mean(Sepal.Length))
+
   #Simple bar plot
-  p <- plot_barplot(iris,
+  p <- plot_barplot(iris.plot,
                     x_var = "Species",
                     y_var = "Sepal.Length")
   plot(p)
 
-  #Same bar plot with colour by Species
-  p <- plot_barplot(iris,
+  #Same bar plot with fill by Species and border colour by Species reversed
+  p <- plot_barplot(iris.plot,
                     x_var = "Species",
                     y_var = "Sepal.Length",
                     fill_title = "Species",
                     fill_vars = "Species",
-                    color_vars = "Species")
+                    colour_vars = "rev(Species)")
   plot(p)
 
   #Same bar plot with a facet for Sepal.Width and a legend with a title

@@ -1,3 +1,38 @@
+set_bar_theme <- function(text_col = black_seq[8], basesize = 12, legend_col = "#E5E2E0", legend_pos = "bottom", keysize = 0.7) {
+  #' Sets a theme for a barplot
+  #' @param text_col: Text colour, defaults to black_seq[8]
+  #' @param basesize: Text basesize, defaults to 12
+  #' @param legend_col: legend background colour, default at "#E5E2E0"
+  #' @param legend_pos: legend positions, takes a string ("top", "bottom", 
+  #'   "right", "left"), or a vector of two numbers between 0 and 1, indicating 
+  #'   the relative x and y positions.
+  #' @param keysize: size of the legend
+  bar_theme <- ggplot2::theme_bw() +
+    ggplot2::theme(legend.text = ggplot2::element_text(size = basesize - 2, colour = text_col),
+                   legend.title = ggplot2::element_text(size = basesize, colour = text_col),
+                   legend.key.size = ggplot2::unit(keysize, "cm"),
+                   legend.key = ggplot2::element_blank(),
+                   legend.background = ggplot2::element_rect(colour = legend_col),
+                   legend.position = legend_pos,
+                   axis.title.x = ggplot2::element_text(vjust = 3.1804, colour = text_col, size = basesize + 2, margin=ggplot2::margin(25,0,0,0)),
+                   axis.text.x = ggplot2::element_text(size = basesize, lineheight = 1.2, vjust = 1),
+                   axis.title.y = ggplot2::element_text(vjust = 0.6316, colour = text_col, size = basesize + 2),
+                   axis.text.y = ggplot2::element_text(size = basesize, colour = text_col, lineheight = 1.2, vjust = 0.5),
+                   axis.ticks.length = ggplot2::unit(.20888, "cm"),
+                   ## plot.title = ggplot2::element_text(vjust = 3.8746, hjust = 0, colour = text_col, size = basesize + 8),
+                   plot.margin = ggplot2::unit(c(.8835, .582083, 0.0748, .9378), "cm"),
+                   panel.border = ggplot2::element_rect(color = "grey", fill = NA, size = 1), ## for facet borders
+                   strip.background = ggplot2::element_rect(fill = "#ececec", colour = black_seq[8]), # facet background
+                   strip.text.x = ggplot2::element_text(size = basesize), # for facet text
+                   strip.text.y = ggplot2::element_text(size = basesize, angle = 0)) # for facet text
+
+  bar_theme["main.title.size"] <- basesize+5
+  bar_theme["bar.label.size"] <- basesize-7
+  bar_theme["bar.label.color"] <- text_col
+
+  ggplot2::theme_set(bar_theme)
+}
+
 plot_barplot <- function(data_frame,
                          x_var,
                          y_var,
@@ -13,7 +48,7 @@ plot_barplot <- function(data_frame,
                          y_facet = FALSE,
                          label_vars = FALSE,
                          percentage = FALSE,
-                         color_vars = NULL, fill_vars = color_vars,
+                         colour_vars = NULL, fill_vars = NULL,
                          colour_palette = NULL, fill_palette = NULL,
                          pos = "dodge",
                          barplot_alpha = 1,
@@ -21,10 +56,16 @@ plot_barplot <- function(data_frame,
                          fill_title = FALSE,
                          legend_labels = ggplot2::waiver(),
                          legend_rev = FALSE,
-                         flip = FALSE){
+                         flip = FALSE,
+                         text_col = NULL,
+                         basesize = NULL,
+                         legend_col = NULL,
+                         legend_pos = NULL,
+                         keysize = NULL){
   #' Draws barplots.
   #' 
   #' @param data_frame: A data frame
+  #'
   #' @param x_var: A factor
   #' @param y_var: A numerical variable
   #'
@@ -51,49 +92,46 @@ plot_barplot <- function(data_frame,
   #'   x-variable, used for filling the bars
   #' @param fill_palette: A vector of length equal to the number of categories
   #'   of fill_vars, an optional colour palette, defaults to fill_brewer
-  #' @param color_vars: A factor, an optional variable by which to slice the
+  #' @param colour_vars: A factor, an optional variable by which to slice the
   #'   x-variable, usually equal to fill_vars, used for colouring the outside
   #'   edge of the bars
   #' @param colour_palette: A vector of length equal to the number of categories
-  #'   of color_vars, an optional colour palette, usually equal to fill_palette,
+  #'   of colour_vars, an optional colour palette, usually equal to fill_palette,
   #'   but can be used to highlight the bar borders, defaults to colour_brewer
   #'   
-  #' @param pos: A position object, an optional placement rule for the bars, defaults to "dodge"
-  #' @param barplot_alpha: An floating number between 0 and 1, an optional degree of transparency for the bars, default at 1
+  #' @param pos: A position, an optional placement rule for the bars, defaults to "dodge"
+  #' @param barplot_alpha: A floating number between 0 and 1, an optional degree of transparency for the bars, default at 1
   #'   
   #' @param colour_title: legend guide for scale_colour, setting a title 
-  #'   activates the legend, defaults to FALSE.
+  #'   activates the legend, requires colour_vars to be set, defaults to FALSE.
   #' @param fill_title: legend guide for scale_fill, setting a title activates 
-  #'   the legend, default at FALSE.
+  #'   the legend, requires fill_vars to be set, default at FALSE.
+  #'
   #' @param legend_labels: a vector of labels for the legend, e.g, 
   #'   c("M\\u0101ori", "Pakeh\\u0101")
-  #' @param legend_pos: legend positions, takes a string ("top", "bottom", 
-  #'   "right", "left"), or a vector of two numbers between 0 and 1, indicating 
-  #'   the relative x and y positions.
   #' @param legend_rev: determines whether the order of the legend labels should
   #'   be reversed
-  #' @param legend_col: legend background colour, default at "#E5E2E0" keysize: 
-  #'   size of the legend
-  #' @param text_col: Text colour, defaults to black_seq[8]
-  #' @param basesize: Text basesize, defaults to 12
   #' @param flip: Flips x-axis and y-axis if TRUE, defaults to FALSE
   #'   
   #' @return a bar plot object
   #' @examples
   #' 
+  #' library(tidyverse)
+  #' iris.plot <- iris %>% group_by(Species) %>% summarize(Sepal.Length=mean(Sepal.Length))
+  #'
   #'   #Simple bar plot
-  #'   p <- plot_barplot(iris,
+  #'   p <- plot_barplot(iris.plot,
   #'                     x_var = "Species",
   #'                     y_var = "Sepal.Length")
   #'   plot(p)
   #' 
-  #'   #Same bar plot with colour by Species
-  #'   p <- plot_barplot(iris,
+  #'   #Same bar plot with fill by Species and border colour by Species reversed
+  #'   p <- plot_barplot(iris.plot,
   #'                     x_var = "Species",
   #'                     y_var = "Sepal.Length",
   #'                     fill_title = "Species",
   #'                     fill_vars = "Species",
-  #'                     color_vars = "Species")
+  #'                     colour_vars = "rev(Species)")
   #'   plot(p)
   #' 
   #'   #Same bar plot with a facet for Sepal.Width and a legend with a title
@@ -108,8 +146,7 @@ plot_barplot <- function(data_frame,
   #' 
   #' @section Bugs: Guide colour and guide fill currently take the same 
   #'   arguments and can not be controlled individually.
-  #'   
-  #'   Labels don't look good with position = "stack"
+  #'
   #' @export
 
   ## theme
@@ -120,13 +157,14 @@ plot_barplot <- function(data_frame,
   p <- p + ggplot2::aes_string(x = x_var,
                                y = y_var,
                                fill = fill_vars,
-                               colour = color_vars,
+                               colour = colour_vars,
                                label = label_vars)
 
   p <- p + ggplot2::geom_bar(position=pos,
                              alpha = barplot_alpha,
                              stat = "identity",
-                             width = bar_width)
+                             width = bar_width,
+                             size=1) ## controls border thickness
 
   p <- p + ggplot2::scale_x_discrete(x_title,
                                      drop = FALSE,
@@ -161,7 +199,7 @@ plot_barplot <- function(data_frame,
 
   ## facet
   if(!(y_facet == FALSE)) {
-    p <- p + ggplot2::facet_grid(y_facet, drop = FALSE, switch="y")
+    p <- p + ggplot2::facet_grid(y_facet, drop = TRUE, scales="free_x")
   }
 
   ## legend
@@ -184,8 +222,8 @@ plot_barplot <- function(data_frame,
   ## bar labels
   if(!(label_vars == FALSE)){
     p <- p + ggplot2::geom_label(ggplot2::aes_string(y = paste(y_var, " - 0.00"), fill = rev(fill_vars)),
-                                 colour = theme_get()[["bar.label.color"]],
-                                 size = theme_get()[["bar.label.size"]],
+                                 colour = ggplot2::theme_get()[["bar.label.color"]],
+                                 size = ggplot2::theme_get()[["bar.label.size"]],
                                  show.legend = FALSE,
                                  position = pos)
   }
@@ -198,44 +236,12 @@ plot_barplot <- function(data_frame,
 
 
   ## title
-  if(exists("main_title")){
+  if(!is.null(main_title)){
     title <- cowplot::ggdraw() + cowplot::draw_label(main_title,
-                                                     size=theme_get()[["main.title.size"]])
+                                                     size=ggplot2::theme_get()[["main.title.size"]])
     p <- cowplot::plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1))
   }
 
   return(p)
 }
 
-
-set_bar_theme <- function(text_col = black_seq[8],
-                           basesize = 12,
-                           legend_col = "#E5E2E0",
-                           legend_pos = "bottom",
-                           keysize = 0.7) {
-  #' Sets a theme for a barplot
-  bar_theme <- ggplot2::theme_bw() +
-    ggplot2::theme(legend.text = ggplot2::element_text(size = basesize - 2, colour = text_col),
-                   legend.title = ggplot2::element_text(size = basesize, colour = text_col),
-                   legend.key.size = ggplot2::unit(keysize, "cm"),
-                   legend.key = ggplot2::element_blank(),
-                   legend.background = ggplot2::element_rect(colour = legend_col),
-                   legend.position = legend_pos,
-                   axis.title.x = ggplot2::element_text(vjust = 3.1804, colour = text_col, size = basesize + 2, margin=ggplot2::margin(25,0,0,0)),
-                   axis.text.x = ggplot2::element_text(lineheight = 1.2, vjust = 1),
-                   axis.title.y = ggplot2::element_text(vjust = 0.6316, colour = text_col, size = basesize + 2),
-                   axis.text.y = ggplot2::element_text(size = basesize, colour = text_col, lineheight = 1.2, vjust = 0.5),
-                   axis.ticks.length = ggplot2::unit(.20888, "cm"),
-                   ## plot.title = ggplot2::element_text(vjust = 3.8746, hjust = 0, colour = text_col, size = basesize + 8),
-                   plot.margin = ggplot2::unit(c(.8835, .582083, 0.0748, .9378), "cm"),
-                   panel.border = element_rect(color = "grey", fill = NA, size = 1), ## for facet borders
-                   strip.background = ggplot2::element_rect(fill = "#ececec", colour = black_seq[8]), # facet background
-                   strip.text.x = ggplot2::element_text(size = basesize), # for facet text
-                   strip.text.y = ggplot2::element_text(size = basesize, angle = 0)) # for facet text
-
-  bar_theme["main.title.size"] <- basesize+5
-  bar_theme["bar.label.size"] <- basesize-7
-  bar_theme["bar.label.color"] <- text_col
-
-theme_set(bar_theme)
-}
