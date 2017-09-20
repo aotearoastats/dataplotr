@@ -17,51 +17,23 @@ set_bar_theme <- function(text_col = black_seq[8], basesize = 12, legend_col = "
                    axis.title.x = ggplot2::element_text(vjust = 3.1804, colour = text_col, size = basesize + 2, margin=ggplot2::margin(25,0,0,0)),
                    axis.text.x = ggplot2::element_text(size = basesize, lineheight = 1.2, vjust = 1),
                    axis.title.y = ggplot2::element_text(vjust = 0.6316, colour = text_col, size = basesize + 2),
-                   axis.text.y = ggplot2::element_text(size = basesize, colour = text_col, lineheight = 1.2, vjust = 0.5),
-                   axis.ticks.length = ggplot2::unit(.20888, "cm"),
+                   axis.text.y = ggplot2::element_text(size = basesize-2, colour = text_col, lineheight = 1.2, vjust = 0.5),
+                   axis.ticks.length = ggplot2::unit(.10888, "cm"),
                    ## plot.title = ggplot2::element_text(vjust = 3.8746, hjust = 0, colour = text_col, size = basesize + 8),
-                   plot.margin = ggplot2::unit(c(.8835, .582083, 0.0748, .9378), "cm"),
+                   plot.margin = ggplot2::unit(c(.8835, 0, 0.0748, 0), "cm"),
                    panel.border = ggplot2::element_rect(color = "grey", fill = NA, size = 1), ## for facet borders
                    strip.background = ggplot2::element_rect(fill = "#ececec", colour = black_seq[8]), # facet background
                    strip.text.x = ggplot2::element_text(size = basesize), # for facet text
                    strip.text.y = ggplot2::element_text(size = basesize, angle = 0)) # for facet text
 
   bar_theme["main.title.size"] <- basesize+5
-  bar_theme["bar.label.size"] <- basesize-7
+  bar_theme["bar.label.size"] <- basesize-9
   bar_theme["bar.label.color"] <- text_col
 
   ggplot2::theme_set(bar_theme)
 }
 
-plot_barplot <- function(data_frame,
-                         x_var,
-                         y_var,
-                         main_title = NULL,
-                         bar_width = NULL,
-                         x_title = ggplot2::waiver(),
-                         x_ticks=TRUE,
-                         y_title = ggplot2::waiver(),
-                         x_limits = NULL,
-                         y_limits = NULL,
-                         x_breaks = ggplot2::waiver(),
-                         y_breaks = ggplot2::waiver(),
-                         y_facet = FALSE,
-                         label_vars = FALSE,
-                         percentage = FALSE,
-                         colour_vars = NULL, fill_vars = NULL,
-                         colour_palette = NULL, fill_palette = NULL,
-                         pos = "dodge",
-                         barplot_alpha = 1,
-                         colour_title = FALSE,
-                         fill_title = FALSE,
-                         legend_labels = ggplot2::waiver(),
-                         legend_rev = FALSE,
-                         flip = FALSE,
-                         text_col = NULL,
-                         basesize = NULL,
-                         legend_col = NULL,
-                         legend_pos = NULL,
-                         keysize = NULL){
+plot_barplot <- function(data_frame, x_var, y_var, main_title = NULL, bar_width = NULL, x_title = ggplot2::waiver(), x_ticks=TRUE, y_title = ggplot2::waiver(), x_limits = NULL, y_limits = NULL, x_breaks = ggplot2::waiver(), y_breaks = ggplot2::waiver(), y_facet = FALSE, label_vars = FALSE, percentage = FALSE, colour_vars = NULL, fill_vars = NULL, colour_palette = NULL, fill_palette = NULL, pos = "dodge", barplot_alpha = 1, colour_title = FALSE, fill_title = FALSE, legend_labels = ggplot2::waiver(), legend_rev = FALSE, flip = FALSE, text_col = NULL, basesize = NULL, legend_col = NULL, legend_pos = NULL, keysize = NULL){
   #' Draws barplots.
   #' 
   #' @param data_frame: A data frame
@@ -127,6 +99,7 @@ plot_barplot <- function(data_frame,
   #' 
   #'   #Same bar plot with fill by Species and border colour by Species reversed
   #'   p <- plot_barplot(iris.plot,
+  #'                     main_title="Sepal.Length by Species on the Iris Data Set",
   #'                     x_var = "Species",
   #'                     y_var = "Sepal.Length",
   #'                     fill_title = "Species",
@@ -149,7 +122,6 @@ plot_barplot <- function(data_frame,
   #'
   #' @export
 
-  ## theme
   set_bar_theme()
 
   p <- ggplot2::ggplot(data = data_frame)
@@ -186,10 +158,10 @@ plot_barplot <- function(data_frame,
 
   ## colour either manual or brewer
   if(!(is.null(colour_palette)) & !(is.null(fill_palette))){
-    p <- p + scale_colour_manual(values = colour_palette,
-                                 labels = legend_labels)
-    p <- p + scale_fill_manual(values = fill_palette,
-                               labels = legend_labels)
+    p <- p + ggplot2::scale_colour_manual(values = colour_palette,
+                                          labels = legend_labels)
+    p <- p + ggplot2::scale_fill_manual(values = fill_palette,
+                                        labels = legend_labels)
   } else {
     p <- p + ggplot2::scale_colour_brewer(labels = legend_labels,
                                           direction = -1)
@@ -237,9 +209,9 @@ plot_barplot <- function(data_frame,
 
   ## title
   if(!is.null(main_title)){
-    title <- cowplot::ggdraw() + cowplot::draw_label(main_title,
-                                                     size=ggplot2::theme_get()[["main.title.size"]])
-    p <- cowplot::plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1))
+    cow <- cowplot::ggdraw()
+    cow <- cow + cowplot::draw_label(main_title, size=ggplot2::theme_get()[["main.title.size"]])
+    p <- cowplot::plot_grid(cow, p, ncol=1, rel_heights=c(0.1, 1))
   }
 
   return(p)

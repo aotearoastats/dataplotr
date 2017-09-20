@@ -106,6 +106,7 @@ iris.plot <- iris \%>\% group_by(Species) \%>\% summarize(Sepal.Length=mean(Sepa
 
   #Same bar plot with fill by Species and border colour by Species reversed
   p <- plot_barplot(iris.plot,
+                    main_title="Sepal.Length by Species on the Iris Data Set",
                     x_var = "Species",
                     y_var = "Sepal.Length",
                     fill_title = "Species",
