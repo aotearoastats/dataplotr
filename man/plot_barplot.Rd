@@ -12,75 +12,80 @@ plot_barplot(data_frame, x_var, y_var, main_title = NULL, bar_width = NULL,
   colour_vars = NULL, fill_vars = NULL, colour_palette = NULL,
   fill_palette = NULL, pos = "dodge", barplot_alpha = 1,
   colour_title = FALSE, fill_title = FALSE,
-  legend_labels = ggplot2::waiver(), legend_rev = FALSE, flip = FALSE,
-  text_col = NULL, basesize = NULL, legend_col = NULL,
-  legend_pos = NULL, keysize = NULL)
+  legend_labels = ggplot2::waiver(), legend_rev = FALSE, flip = FALSE)
 }
 \arguments{
-\item{data_frame:}{A data frame}
+\item{data_frame}{A data frame}
 
-\item{x_var:}{A factor}
+\item{x_var}{A factor}
 
-\item{y_var:}{A numerical variable}
+\item{y_var}{A numerical variable}
 
-\item{main_title:}{A string, optional main title of the barplot}
+\item{main_title}{A string, optional main title of the barplot}
 
-\item{bar_width:}{A floating number, optional bar width}
+\item{bar_width}{A floating number, optional bar width}
 
-\item{x_title:}{A string, optional title of the x-axis}
+\item{x_title}{A string, optional title of the x-axis}
 
-\item{x_limits:}{A vector of length 2, optional scale limits, e.g., c(4,10)}
+\item{x_ticks}{Logical, FALSE switches off tick marks on the x-axis}
 
-\item{x_breaks:}{A vector, optional scale breaks, e.g., c(4, 6, 9)}
+\item{y_title}{A string, optional title of the y-axis}
 
-\item{x_ticks:}{Logical, FALSE switches off tick marks on the x-axis}
+\item{x_limits}{A vector of length 2, optional scale limits, e.g.,
+c(4,10)}
 
-\item{y_title:}{A string, optional title of the y-axis}
+\item{y_limits}{A vector of length 2, optional scale limits, e.g., c(0,
+1)}
 
-\item{y_limits:}{A vector of length 2, optional scale limits, e.g., c(0, 1)}
+\item{x_breaks}{A vector, optional scale breaks, e.g., c(4, 6, 9)}
 
-\item{y_breaks:}{A vector, optional breaks, e.g., c(0.0, 0.5, 1.0)}
+\item{y_breaks}{A vector, optional breaks, e.g., c(0.0, 0.5, 1.0)}
 
-\item{y_facet:}{A formular, an optional grid for the y-variable controlled
-by y_facet e.g., "SCHOOL ~ ." to have the y-variable sliced horizontally 
-by a school name variable, or ". ~ SCHOOL" to have the y-variable sliced 
-vertically by a school name variable. Defaults to FALSE.}
+\item{y_facet}{A formular, an optional grid for the y-variable
+controlled by y_facet e.g., "SCHOOL ~ ." to have the y-variable sliced
+horizontally by a school name variable, or ". ~ SCHOOL" to have the
+y-variable sliced vertically by a school name variable. Defaults to
+FALSE.}
 
-\item{label_vars:}{An optional label for the bars , e.g, "percent(FREQ)"}
+\item{label_vars}{An optional label for the bars , e.g, "percent(FREQ)"}
 
-\item{percentage:}{logical, if TRUE assumes that y_var is a percentage}
+\item{percentage}{logical, if TRUE assumes that y_var is a percentage}
 
-\item{fill_vars:}{A factor, an optional variable by which to slice the
-x-variable, used for filling the bars}
-
-\item{fill_palette:}{A vector of length equal to the number of categories
-of fill_vars, an optional colour palette, defaults to fill_brewer}
-
-\item{colour_vars:}{A factor, an optional variable by which to slice the
-x-variable, usually equal to fill_vars, used for colouring the outside
+\item{colour_vars}{A factor, an optional variable by which to slice the 
+x-variable, usually equal to fill_vars, used for colouring the outside 
 edge of the bars}
 
-\item{colour_palette:}{A vector of length equal to the number of categories
-of colour_vars, an optional colour palette, usually equal to fill_palette,
-but can be used to highlight the bar borders, defaults to colour_brewer}
+\item{fill_vars}{A factor, an optional variable by which to slice the 
+x-variable, used for filling the bars}
 
-\item{pos:}{A position, an optional placement rule for the bars, defaults to "dodge"}
+\item{colour_palette}{A vector of length equal to the number of
+categories of colour_vars, an optional colour palette, usually equal to
+fill_palette, but can be used to highlight the bar borders, defaults to
+colour_brewer}
 
-\item{barplot_alpha:}{A floating number between 0 and 1, an optional degree of transparency for the bars, default at 1}
+\item{fill_palette}{A vector of length equal to the number of categories
+of fill_vars, an optional colour palette, defaults to fill_brewer}
 
-\item{colour_title:}{legend guide for scale_colour, setting a title 
-activates the legend, requires colour_vars to be set, defaults to FALSE.}
+\item{pos}{A position, an optional placement rule for the bars, defaults
+to "dodge"}
 
-\item{fill_title:}{legend guide for scale_fill, setting a title activates 
+\item{barplot_alpha}{A floating number between 0 and 1, an optional 
+degree of transparency for the bars, default at 1}
+
+\item{colour_title}{legend guide for scale_colour, setting a title 
+activates the legend, requires colour_vars to be set, defaults to
+FALSE.}
+
+\item{fill_title}{legend guide for scale_fill, setting a title activates
 the legend, requires fill_vars to be set, default at FALSE.}
 
-\item{legend_labels:}{a vector of labels for the legend, e.g, 
+\item{legend_labels}{a vector of labels for the legend, e.g, 
 c("M\\u0101ori", "Pakeh\\u0101")}
 
-\item{legend_rev:}{determines whether the order of the legend labels should
-be reversed}
+\item{legend_rev}{determines whether the order of the legend labels
+should be reversed}
 
-\item{flip:}{Flips x-axis and y-axis if TRUE, defaults to FALSE}
+\item{flip}{Flips x-axis and y-axis if TRUE, defaults to FALSE}
 }
 \value{
 a bar plot object
@@ -89,12 +94,14 @@ a bar plot object
 Draws barplots.
 }
 \section{Bugs}{
- Guide colour and guide fill currently take the same 
-  arguments and can not be controlled individually.
+
+Guide colour and guide fill currently take the same arguments and can
+not be controlled individually.
 }
 
 \examples{
 
+\dontrun{
 library(tidyverse)
 iris.plot <- iris \%>\% group_by(Species) \%>\% summarize(Sepal.Length=mean(Sepal.Length))
 
@@ -122,6 +129,6 @@ iris.plot <- iris \%>\% group_by(Species) \%>\% summarize(Sepal.Length=mean(Sepa
                     y_facet = "Sepal.Width ~ .",
                     fill_title = "Species",
                     flip = TRUE)
-  plot(p)
+  plot(p)}
 
 }

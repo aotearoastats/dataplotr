@@ -1,12 +1,12 @@
 set_bar_theme <- function(text_col = black_seq[8], basesize = 12, legend_col = "#E5E2E0", legend_pos = "bottom", keysize = 0.7) {
   #' Sets a theme for a barplot
-  #' @param text_col: Text colour, defaults to black_seq[8]
-  #' @param basesize: Text basesize, defaults to 12
-  #' @param legend_col: legend background colour, default at "#E5E2E0"
-  #' @param legend_pos: legend positions, takes a string ("top", "bottom", 
+  #' @param text_col Text colour, defaults to black_seq[8]
+  #' @param basesize Text basesize, defaults to 12
+  #' @param legend_col legend background colour, default at "#E5E2E0"
+  #' @param legend_pos legend positions, takes a string ("top", "bottom", 
   #'   "right", "left"), or a vector of two numbers between 0 and 1, indicating 
   #'   the relative x and y positions.
-  #' @param keysize: size of the legend
+  #' @param keysize size of the legend
   bar_theme <- ggplot2::theme_bw() +
     ggplot2::theme(legend.text = ggplot2::element_text(size = basesize - 2, colour = text_col),
                    legend.title = ggplot2::element_text(size = basesize, colour = text_col),
