@@ -2,7 +2,7 @@ Package: dataplotr
 Title: Data plotting
 Version: 0.0.0.9000
 Authors@R: person("Alexander", "Kegel", email = "afk-aotearoastats@mailbox.org", role = c("cre"))
-Description: Data plotting
+Description: Data plotting.
 Depends: R (>= 3.4.0)
 License: MIT + file LICENSE
 Encoding: UTF-8

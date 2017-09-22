@@ -1,26 +1,36 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-dataplotr
-=========
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# dataplotr
 
 This package mainly contains wrapper functions for ggplot2.
 
-Installation
-------------
+
+## Installation
 
 You can install dataplotr from github with:
 
-``` r
+```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
 devtools::install_github("aotearoastats/dataplotr")
 ```
 
-plot\_barplot
--------------
+## plot_barplot
+Plot_barplot plots simple barplots with the option to add a grid. See `?plot_barplot` for documentation.
 
-Plot\_barplot plots simple barplots with the option to add a grid. See `?plot_barplot` for documentation.
 
-``` r
+```{r plot_barplot_exampe, message=FALSE, warning=FALSE}
 library(dataplotr)
 library(dplyr)
 iris.plot <- iris %>% 
@@ -34,6 +44,5 @@ plot_barplot(iris.plot,
              fill_title = "Species",
              fill_vars = "Species",
              colour_vars = "rev(Species)")
-```
 
-![](README-plot_barplot_exampe-1.png)
+```
