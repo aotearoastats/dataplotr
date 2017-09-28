@@ -7,6 +7,7 @@ set_bar_theme <- function(text_col = black_seq[8], basesize = 12, legend_col = "
   #'   "right", "left"), or a vector of two numbers between 0 and 1, indicating 
   #'   the relative x and y positions.
   #' @param keysize size of the legend
+  #' @export
   bar_theme <- ggplot2::theme_bw() +
     ggplot2::theme(legend.text = ggplot2::element_text(size = basesize - 2, colour = text_col),
                    legend.title = ggplot2::element_text(size = basesize, colour = text_col),
