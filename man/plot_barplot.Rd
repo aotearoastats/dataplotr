@@ -51,11 +51,11 @@ FALSE.}
 
 \item{percentage}{logical, if TRUE assumes that y_var is a percentage}
 
-\item{colour_vars}{A factor, an optional variable by which to slice the 
-x-variable, usually equal to fill_vars, used for colouring the outside 
+\item{colour_vars}{A factor, an optional variable by which to slice the
+x-variable, usually equal to fill_vars, used for colouring the outside
 edge of the bars}
 
-\item{fill_vars}{A factor, an optional variable by which to slice the 
+\item{fill_vars}{A factor, an optional variable by which to slice the
 x-variable, used for filling the bars}
 
 \item{colour_palette}{A vector of length equal to the number of
@@ -69,17 +69,17 @@ of fill_vars, an optional colour palette, defaults to fill_brewer}
 \item{pos}{A position, an optional placement rule for the bars, defaults
 to "dodge"}
 
-\item{barplot_alpha}{A floating number between 0 and 1, an optional 
+\item{barplot_alpha}{A floating number between 0 and 1, an optional
 degree of transparency for the bars, default at 1}
 
-\item{colour_title}{legend guide for scale_colour, setting a title 
+\item{colour_title}{legend guide for scale_colour, setting a title
 activates the legend, requires colour_vars to be set, defaults to
 FALSE.}
 
 \item{fill_title}{legend guide for scale_fill, setting a title activates
 the legend, requires fill_vars to be set, default at FALSE.}
 
-\item{legend_labels}{a vector of labels for the legend, e.g, 
+\item{legend_labels}{a vector of labels for the legend, e.g,
 c("M\\u0101ori", "Pakeh\\u0101")}
 
 \item{legend_rev}{determines whether the order of the legend labels

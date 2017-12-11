@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # dataplotr
 
-This package mainly contains wrapper functions for ggplot2.
+This package mainly contains wrapper functions around ggplot2.
 
 
 ## Installation
