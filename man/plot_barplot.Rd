@@ -4,15 +4,7 @@
 \alias{plot_barplot}
 \title{Draws barplots.}
 \usage{
-plot_barplot(data_frame, x_var, y_var, main_title = NULL, bar_width = NULL,
-  x_title = ggplot2::waiver(), x_ticks = TRUE,
-  y_title = ggplot2::waiver(), x_limits = NULL, y_limits = NULL,
-  x_breaks = ggplot2::waiver(), y_breaks = ggplot2::waiver(),
-  y_facet = FALSE, label_vars = FALSE, percentage = FALSE,
-  colour_vars = NULL, fill_vars = NULL, colour_palette = NULL,
-  fill_palette = NULL, pos = "dodge", barplot_alpha = 1,
-  colour_title = FALSE, fill_title = FALSE,
-  legend_labels = ggplot2::waiver(), legend_rev = FALSE, flip = FALSE)
+plot_barplot(...)
 }
 \arguments{
 \item{data_frame}{A data frame}
@@ -27,17 +19,17 @@ plot_barplot(data_frame, x_var, y_var, main_title = NULL, bar_width = NULL,
 
 \item{x_title}{A string, optional title of the x-axis}
 
+\item{x_limits}{A vector of length 2, optional scale limits, e.g.,
+c(4,10)}
+
+\item{x_breaks}{A vector, optional scale breaks, e.g., c(4, 6, 9)}
+
 \item{x_ticks}{Logical, FALSE switches off tick marks on the x-axis}
 
 \item{y_title}{A string, optional title of the y-axis}
 
-\item{x_limits}{A vector of length 2, optional scale limits, e.g.,
-c(4,10)}
-
 \item{y_limits}{A vector of length 2, optional scale limits, e.g., c(0,
 1)}
-
-\item{x_breaks}{A vector, optional scale breaks, e.g., c(4, 6, 9)}
 
 \item{y_breaks}{A vector, optional breaks, e.g., c(0.0, 0.5, 1.0)}
 
@@ -51,20 +43,20 @@ FALSE.}
 
 \item{percentage}{logical, if TRUE assumes that y_var is a percentage}
 
+\item{fill_vars}{A factor, an optional variable by which to slice the
+x-variable, used for filling the bars}
+
+\item{fill_palette}{A vector of length equal to the number of categories
+of fill_vars, an optional colour palette, defaults to fill_brewer}
+
 \item{colour_vars}{A factor, an optional variable by which to slice the
 x-variable, usually equal to fill_vars, used for colouring the outside
 edge of the bars}
 
-\item{fill_vars}{A factor, an optional variable by which to slice the
-x-variable, used for filling the bars}
-
 \item{colour_palette}{A vector of length equal to the number of
 categories of colour_vars, an optional colour palette, usually equal to
 fill_palette, but can be used to highlight the bar borders, defaults to
-colour_brewer}
-
-\item{fill_palette}{A vector of length equal to the number of categories
-of fill_vars, an optional colour palette, defaults to fill_brewer}
+colour_breweR}
 
 \item{pos}{A position, an optional placement rule for the bars, defaults
 to "dodge"}
@@ -109,7 +101,7 @@ iris.plot <- iris \%>\% group_by(Species) \%>\% summarize(Sepal.Length=mean(Sepa
   p <- plot_barplot(iris.plot,
                     x_var = "Species",
                     y_var = "Sepal.Length")
-  plot(p)
+  print(p)
 
   #Same bar plot with fill by Species and border colour by Species reversed
   p <- plot_barplot(iris.plot,
@@ -119,7 +111,7 @@ iris.plot <- iris \%>\% group_by(Species) \%>\% summarize(Sepal.Length=mean(Sepa
                     fill_title = "Species",
                     fill_vars = "Species",
                     colour_vars = "rev(Species)")
-  plot(p)
+  print(p)
 
   #Same bar plot with a facet for Sepal.Width and a legend with a title
   p <- plot_barplot(iris,
@@ -129,6 +121,6 @@ iris.plot <- iris \%>\% group_by(Species) \%>\% summarize(Sepal.Length=mean(Sepa
                     y_facet = "Sepal.Width ~ .",
                     fill_title = "Species",
                     flip = TRUE)
-  plot(p)}
+  print(p)}
 
 }

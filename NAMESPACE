@@ -2,4 +2,3 @@
 
 export(plot_barplot)
 export(set_bar_theme)
-export(set_line_theme)

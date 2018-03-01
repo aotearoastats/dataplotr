@@ -4,8 +4,8 @@
 \alias{set_bar_theme}
 \title{Sets a theme for a barplot}
 \usage{
-set_bar_theme(text_col = black_seq[8], basesize = 12,
-  legend_col = "#E5E2E0", legend_pos = "bottom", keysize = 0.7)
+set_bar_theme(text_col = "#000000", basesize = 12, legend_col = "#E5E2E0",
+  legend_pos = "bottom", keysize = 0.7)
 }
 \arguments{
 \item{text_col}{Text colour, defaults to black_seq[8]}
