@@ -51,8 +51,8 @@ set_bar_theme <-
            '#fc9272', '#fb6a4a', '#ef3b2c',
            '#cb181d', '#a50f15', '#67000d')
 
-    bar_theme <- bar_theme +
-      ggplot2::theme(
+    bar_theme <-
+      bar_theme + ggplot2::theme(
                  ## legent_settings
                  legend.text=ggplot2::element_text(
                                         size=basesize - 2,
