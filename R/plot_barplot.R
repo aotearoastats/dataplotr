@@ -99,13 +99,24 @@
 plot_barplot <- function(...) {
   set_bar_theme()
   elements <- list(bar,
+                   bar_labels,
                    scales,
                    colour,
                    legend,
+                   facet,
                    flip_axes,
-                   bar_labels,
                    x_ticks,
-                   title)
+                   title
+                   )
+  ## 30/4/18 AK
+  ## facet interacts with title
+  ## If you run into the following error (after checking the data) it may be a problem
+  ## with the relative placements of facet and title and possbily flip_axes. Reproduce
+  ## error as follows: move facet after title and try to create a plot with a facet and
+  ## a title. It will fail with the following error:
+  ##
+  ## Error in combine_vars(data, params$plot_env, cols, drop = params$drop)
+  ## At least one layer must contain all variables used for facetting
   d <- dataplot(..., element_function=elements)
   return(d)
 }

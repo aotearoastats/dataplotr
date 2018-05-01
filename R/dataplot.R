@@ -16,8 +16,8 @@ dataplot <-
            y_facet = FALSE,
            label_vars = FALSE,
            percentage = FALSE,
-           colour_vars = NULL,
-           fill_vars = NULL,
+           colour_vars = FALSE,
+           fill_vars = FALSE,
            colour_palette = NULL,
            fill_palette = NULL,
            pos = "dodge",
@@ -27,6 +27,12 @@ dataplot <-
            legend_labels = ggplot2::waiver(),
            legend_rev = FALSE,
            flip = FALSE){
+
+    ## comment 30/4/18 AK
+    ## quo_name(quo(NULL)) currently fails, see https://github.com/r-lib/rlang/issues/430
+    ## all variables above that have a default of NULL could cause the following error:
+    ## #> Error: `expr` must quote a symbol, scalar, or call
+    ## set to FALSE instead
 
     p <- ggplot2::ggplot(data = data_frame)
 
