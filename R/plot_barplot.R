@@ -97,7 +97,6 @@
 #'
 #' @export
 plot_barplot <- function(...) {
-  set_bar_theme()
   elements <- list(bar,
                    bar_labels,
                    scales,
