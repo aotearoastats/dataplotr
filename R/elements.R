@@ -1,5 +1,5 @@
 #' Add a bar element
-bar <- function(p, bar_width = NULL, pos = "dodge", barplot_alpha = 1){
+bar <- function(p){
   p <- p + ggplot2::geom_bar(
                       position = pos,
                       alpha = barplot_alpha,
